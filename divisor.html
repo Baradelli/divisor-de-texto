@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Divisor de Texto</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: auto;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      textarea {
+        width: 100%;
+        height: 200px;
+        padding: 10px;
+        box-sizing: border-box;
+        font-size: 16px;
+        resize: vertical;
+      }
+
+      #processButton {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        margin-top: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      #processButton:hover {
+        background-color: #2980b9;
+      }
+
+      .text-block {
+        background-color: #fff;
+        padding: 20px;
+        margin-top: 20px;
+        position: relative;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .block-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .copy-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: #2ecc71;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      .copy-button:hover {
+        background-color: #27ae60;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Divisor de Texto</h1>
+      <textarea
+        id="inputText"
+        placeholder="Cole ou digite seu texto aqui..."
+      ></textarea>
+      <button id="processButton">Processar</button>
+      <div id="output"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("processButton")
+        .addEventListener("click", function () {
+          var text = document.getElementById("inputText").value;
+          var output = document.getElementById("output");
+          output.innerHTML = ""; // Limpa a saída anterior
+
+          if (text.length === 0) {
+            alert("Por favor, insira um texto.");
+            return;
+          }
+
+          var chunks = [];
+
+          for (var i = 0; i < text.length; i += 5000) {
+            chunks.push(text.substr(i, 5000));
+          }
+
+          chunks.forEach(function (chunk, index) {
+            var block = document.createElement("div");
+            block.className = "text-block";
+
+            var title = document.createElement("div");
+            title.className = "block-title";
+            title.innerText = "Bloco " + (index + 1);
+
+            var pre = document.createElement("pre");
+            pre.innerText = chunk;
+
+            var copyButton = document.createElement("button");
+            copyButton.className = "copy-button";
+            copyButton.innerText = "Copiar";
+            copyButton.addEventListener("click", function () {
+              copyToClipboard(chunk);
+            });
+
+            block.appendChild(title);
+            block.appendChild(copyButton);
+            block.appendChild(pre);
+
+            output.appendChild(block);
+          });
+        });
+
+      function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(
+          function () {
+            alert("Texto copiado para a área de transferência.");
+          },
+          function (err) {
+            alert("Erro ao copiar o texto: " + err);
+          }
+        );
+      }
+    </script>
+  </body>
+</html>
