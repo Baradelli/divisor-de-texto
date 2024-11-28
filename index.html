@@ -111,9 +111,21 @@
           }
 
           var chunks = [];
+          var maxChunkSize = 5000;
 
-          for (var i = 0; i < text.length; i += 5000) {
-            chunks.push(text.substr(i, 5000));
+          while (text.length > 0) {
+            let chunk = text.slice(0, maxChunkSize);
+
+            // Garante que não corte palavras ao dividir
+            if (text.length > maxChunkSize) {
+              let lastSpaceIndex = chunk.lastIndexOf(" ");
+              if (lastSpaceIndex > -1) {
+                chunk = chunk.slice(0, lastSpaceIndex);
+              }
+            }
+
+            chunks.push(chunk);
+            text = text.slice(chunk.length).trim();
           }
 
           chunks.forEach(function (chunk, index) {
@@ -132,6 +144,7 @@
             copyButton.innerText = "Copiar";
             copyButton.addEventListener("click", function () {
               copyToClipboard(chunk);
+              openLinks();
             });
 
             block.appendChild(title);
@@ -151,6 +164,10 @@
             alert("Erro ao copiar o texto: " + err);
           }
         );
+      }
+
+      function openLinks() {
+        window.open("https://elevenlabs.io/app/sign-up", "_blank");
       }
     </script>
   </body>
